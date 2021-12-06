@@ -7,13 +7,16 @@ body {
 }
 
 .searchResultDiv {
-  width: 25vw;
+  flex: 1;
   display: flex;
+  margin: 1rem;
 }
 .resultsDiv {
   display: flex;
-  flex-direction: wrap;
+  flex-direction: row;
+  flex-wrap: wrap;
   align-items: flex-start;
+  width: 90vw;
 }
 
 header,

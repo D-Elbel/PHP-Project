@@ -16,7 +16,7 @@
             <table>
                 <tr>     
                     <td><form method="POST" action="browse.php">
-                            <input type="text" name="productname">
+                            <input type="text" name="productname"  placeholder="Search Name/Category">
                             <input type="submit" value="Search">
                          </form>
                     </td>

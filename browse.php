@@ -11,7 +11,7 @@
                 try { 
                 $pdo = new PDO('mysql:host=localhost;dbname=grocerystore; charset=utf8', 'root', ''); 
                 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                $sql = 'SELECT count(productname) FROM products where productname LIKE :pname';
+                $sql = 'SELECT count(productname) FROM products where productname LIKE :pname OR category LIKE :pname';
                 $result = $pdo->prepare($sql);
                 $result->bindValue(':pname',  '%'. $_POST['productname'] . '%'); 
                 $result->execute();
@@ -20,7 +20,7 @@
 
                     
 
-                    $sql = "SELECT * FROM products where productname LIKE :pname";
+                    $sql = "SELECT * FROM products where productname LIKE :pname OR category LIKE :pname";
                     $result = $pdo->prepare($sql);
                     $result->bindValue(':pname', '%'. $_POST['productname'] . '%'); 
                     $result->execute();
@@ -30,7 +30,7 @@
                       echo "<div class=\"searchResultDiv\"><figure>";
                       
                       echo"<img class=\"searchResultIMG\" src=\"" . $row['imglocation'] . "\"><br>";
-                      echo "<figcaption>" . '<strong>' . $row['category'] .  '</strong><br>'. $row['productname'].  ' €' . $row['price']. "</figcaption>";
+                      echo "<figcaption>" . '<strong>' . $row['category'] .  '</strong><br>'. $row['productname'].  '€' . $row['price']. "</figcaption>";
                       echo "</figure></div>";
                    }
 
