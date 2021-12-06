@@ -5,6 +5,8 @@
     </head>
     <body>
 
+    <?php include 'header.html'?>
+
 
     <form action="signup.php" method="post">                
              Firstname: <input type="text" name="cfirstname"><br>
@@ -52,9 +54,8 @@ if (isset($_POST['submitdetails'])) {
             $stmt->bindValue(':ctown', $ctown);
             $stmt->bindValue(':cstreet', $cstreet);
 
-            echo  "Test";
             $stmt->execute();
-            echo  "Added try doing another";
+            echo  "Sign Up Successful!";
             }
         } 
         catch (PDOException $e) { 

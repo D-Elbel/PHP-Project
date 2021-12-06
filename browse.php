@@ -1,17 +1,11 @@
-<html>
-    <head>
-        <title>Browse Products</title>
-        <link rel="stylesheet" href="style.css">
-    </head>
-    <body>
+
+    <?php include 'header.php'?>
 
 
-    <form method="POST" action="browse.php">
-            <input type="text" name="productname">
-            <input type="submit" value="search">
-    </form>
 
         <?php
+
+        echo"<div class=\"resultsDiv\">";
 
             if(isset($_POST['productname'])){
                 try { 
@@ -32,7 +26,12 @@
                     $result->execute();
                 
                 while ($row = $result->fetch()) { 
-                      echo $row['productname'] .  ' €'. $row['price'].  ' ' . $row['category']. '<br>';
+
+                      echo "<div class=\"searchResultDiv\"><figure>";
+                      
+                      echo"<img class=\"searchResultIMG\" src=\"" . $row['imglocation'] . "\"><br>";
+                      echo "<figcaption>" . '<strong>' . $row['category'] .  '</strong><br>'. $row['productname'].  ' €' . $row['price']. "</figcaption>";
+                      echo "</figure></div>";
                    }
 
                    
@@ -47,13 +46,8 @@
 
             }
             
-                
-        
-        
-            
-                
+            echo"</div>";      
+                                   
         ?>
 
-        
-    </body>
-</html>
+<?php include 'footer.php'?>
