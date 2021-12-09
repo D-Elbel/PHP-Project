@@ -1,13 +1,28 @@
 
     <?php include 'header.php'?>
 
-
+        
 
         <?php
+
+
+
+        $basket_ids = array();
+
+        $_SESSION["basket"] = array();
+        $_SESSION["basketIDs"] = array();
+        $_SESSION["basketQuants"] = array();
+
+     //   if(!isset($_POST['productname'])){
+     //       include 'browsetable.php';
+     //   }
 
         echo"<div class=\"resultsDiv\">";
 
             if(isset($_POST['productname'])){
+                
+                
+
                 try { 
                 $pdo = new PDO('mysql:host=localhost;dbname=grocerystore; charset=utf8', 'root', ''); 
                 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -28,13 +43,14 @@
                 while ($row = $result->fetch()) { 
 
                       echo "<div class=\"searchResultDiv\"><figure>";
-                      
+                      echo '<input class="hiddenInput" type="text" value="' . $row['productname'] . '">';
                       echo"<img class=\"searchResultIMG\" src=\"" . $row['imglocation'] . "\"><br>";
                       echo "<figcaption>" . '<strong>' . $row['category'] .  '</strong><br>'. $row['productname'].  '€' . $row['price']. "</figcaption>";
+                      echo '<form action="browse.php" method="POST"><button name="addProd" type="submit" value="'. $row['ProductID'] .'">Add to Cart</button> <input type="number" id="quantity" value="" name="quantity" min="1" max="10"></form>';
                       echo "</figure></div>";
                    }
 
-                   
+                
                 }
                 else {
                       print "No rows matched the query.";
@@ -45,7 +61,24 @@
                 }
 
             }
+
+            if(isset($_POST['addProd'])){
+
+                
+                $_SESSION["productname"] = $_POST['addProd'];
+                array_push($_SESSION['basketIDs'],$_POST['addProd']);
+                array_push($_SESSION['basketQuants'],$_POST['quantity']);
+                echo$_SESSION["productname"];
+               
+                var_dump($_SESSION['basketIDs']);
+                var_dump($_SESSION['basketQuants']);
+                //print_r(array_keys($_SESSION['basketIDs']));
+
+                echo'<div class="cartSuccess"><h2>Items Successfully Added!</h2></div>';
+            }
             
+           
+
             echo"</div>";      
                                    
         ?>
