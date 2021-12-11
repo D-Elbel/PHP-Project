@@ -73,6 +73,22 @@ form {
   display: flex;
   flex-direction: row;
   width: 90vw;
+  justify-content: space-around;
+}
+
+#cartPane {
+  position: absolute;
+  right: 50px;
+  top: 50px;
+  width: 20vw;
+  height: 40vh;
+  background-color: green;
+  display: none;
+  z-index: 9000;
+}
+
+input {
+  margin: 0.2rem;
 }
 
 header,

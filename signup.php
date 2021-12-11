@@ -7,23 +7,29 @@
     <div class="loginPage">
 
     <div class="signupDiv">
-    <form action="signup.php" method="post">                
-             Firstname: <input type="text" name="cfirstname"><br>
-             Lastname: <input type="text" name="clastname"><br>
-             Phone: <input type="text" name="cphone"><br>
-             Email: <input type="text" name="cemail" ><br>
-             Eircode: <input type="text" name="ceircode" ><br>
-             County: <input type="text" name="ccounty" ><br>
-             Town: <input type="text" name="ctown" ><br>
-             Street: <input type="text" name="cstreet" ><br>
-             <input type="submit" name="submitdetails" value="SUBMIT" >
+    <form action="signup.php" method="post">     
+        
+        <table>
+            <tr> <td>Firstname</td> <td><input type="text" name="cfirstname"></td> </tr>
+            <tr> <td>Lastname</td> <td><input type="text" name="clastname"></td> </tr>
+            <tr> <td>Phone</td> <td><input type="text" name="cphone"></td> </tr>
+            <tr> <td>Email</td> <td><input type="text" name="cemail" ></td> </tr>
+            <tr> <td>Eircode</td> <td><input type="text" name="ceircode" ></td> </tr>
+            <tr> <td>County</td> <td><input type="text" name="ccounty" ></td> </tr>
+            <tr> <td>Town</td> <td><input type="text" name="ctown" ></td> </tr>
+            <tr> <td>Street</td> <td><input type="text" name="cstreet" ></td> </tr>
+        </table>                                                 
+                                       
+        <input type="submit" name="submitdetails" value="SUBMIT" >
         </form>
     </div>
     
     <div class="loginDiv">
-    <form action="signup.php" method="post">                
-             Email: <input type="text" name="lcemail" ><br>
-             Phone: <input type="text" name="lcphone"><br>
+    <form action="signup.php" method="post">      
+        <table>
+        <tr> <td>Email</td> <td><input type="text" name="lcemail" ></td> </tr>
+            <tr> <td>Phone</td> <td><input type="text" name="lcphone"></td> </tr>
+        </table>          
              <input type="submit" name="signIn" value="SUBMIT" >
         </form>
     </div>  
@@ -32,6 +38,11 @@
 
     <?php
 session_start();
+
+$_SESSION["basket"] = array();
+        $_SESSION["basketIDs"] = array();
+        $_SESSION["basketQuants"] = array();
+        
 if (isset($_POST['submitdetails'])) {                   
     try { 
         $cfirstname = $_POST['cfirstname'];

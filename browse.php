@@ -1,17 +1,20 @@
 
-    <?php include 'header.php'?>
+    <?php include 'header.php';
+          //include 'cart.php';
+    ?>
 
         
 
         <?php
 
+        //session_start();
 
+        
 
-        $basket_ids = array();
+        $basket_ids = $_SESSION["basketIDs"];
+        $basket_quants = $_SESSION["basketQuants"];
 
-        $_SESSION["basket"] = array();
-        $_SESSION["basketIDs"] = array();
-        $_SESSION["basketQuants"] = array();
+       
 
      //   if(!isset($_POST['productname'])){
      //       include 'browsetable.php';
@@ -41,7 +44,8 @@
                     $result->execute();
                 
                 while ($row = $result->fetch()) { 
-
+                      
+                     //Product images are sourced from Tesco.ie
                       echo "<div class=\"searchResultDiv\"><figure>";
                       echo '<input class="hiddenInput" type="text" value="' . $row['productname'] . '">';
                       echo"<img class=\"searchResultIMG\" src=\"" . $row['imglocation'] . "\"><br>";
@@ -64,15 +68,14 @@
 
             if(isset($_POST['addProd'])){
 
+            
                 
-                $_SESSION["productname"] = $_POST['addProd'];
-                array_push($_SESSION['basketIDs'],$_POST['addProd']);
-                array_push($_SESSION['basketQuants'],$_POST['quantity']);
-                echo$_SESSION["productname"];
+                array_push($_SESSION["basketIDs"], $_POST['addProd']);
+                array_push($_SESSION["basketQuants"], $_POST['quantity']);
                
-                var_dump($_SESSION['basketIDs']);
-                var_dump($_SESSION['basketQuants']);
-                //print_r(array_keys($_SESSION['basketIDs']));
+                print_r($_SESSION['basketIDs']);
+                print_r($_SESSION['basketQuants']);
+                
 
                 echo'<div class="cartSuccess"><h2>Items Successfully Added!</h2></div>';
             }
