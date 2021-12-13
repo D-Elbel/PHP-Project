@@ -7,7 +7,13 @@
 
         <?php
 
-        //session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+    $_SESSION["basket"] = array();
+    $_SESSION["basketIDs"] = array();
+    $_SESSION["basketQuants"] = array();
+    
+}
 
         
 

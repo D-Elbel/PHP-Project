@@ -3,7 +3,13 @@
         <title>Browse Products</title>
         <link rel="stylesheet" href="style.css">
         <?php 
-            session_start();
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+                $_SESSION["basket"] = array();
+                $_SESSION["basketIDs"] = array();
+                $_SESSION["basketQuants"] = array();
+                
+            }
             echo'<script src="scripts.js"> </script>';
 
         ?>
@@ -27,9 +33,11 @@
                          </form>
                     </td>
                     <td>
+                    <button>
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
                             <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
                         </svg>
+                    </button>
                     </td>
                     <td id="cart">
                         <button onClick="showCart()"> 
@@ -39,36 +47,42 @@
                         </button>
                     </td>
                     <td>
+                      <button>
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-arrow-right-square" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm4.5 5.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
                         </svg>
-                    </td>
-                       
+                        </button>
+                    </td>                       
                 <tr>
             </table>
             
         </li>
         </ul>
     </nav>
-
+    
     <div id="cartPane">
     <table>
+
         <?php 
             
-
-            if(count($_SESSION['basketIDs']) > 0){
+            if(isset($_SESSION['basketIDs'])){
+                if(count($_SESSION['basketIDs']) > 0){
                 
-                for($i = 0; $i < count($_SESSION['basketIDs']); $i++){
-                    echo'<tr><td>' . $_SESSION['basketIDs'][$i] . '</td></tr>';
+                    for($i = 0; $i < count($_SESSION['basketIDs']); $i++){
+                        echo'<tr><td>' . $_SESSION['basketIDs'][$i] . '</td></tr>';
+                    }
+                    
                 }
-                
+                else{
+                    echo'No Items In Cart';
+                }
             }
-            else{
-                echo'No Items In Cart';
-            }
+
+           
 
             
         ?>
     </table>
-</div>  
+</div> 
+  
 </header>
