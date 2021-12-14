@@ -68,6 +68,8 @@
 
                 echo'<div class="cartSuccess"><h2>Items Successfully Added!</h2></div>';
 
+               
+
             }
             
            

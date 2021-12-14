@@ -64,7 +64,7 @@
 
         <?php 
             
-            if(isset($_SESSION['basketIDs'])){
+                if(isset($_SESSION['basketIDs'])){
                 if(count($_SESSION['basketIDs']) > 0){
                 
                     for($i = 0; $i < count($_SESSION['basketIDs']); $i++){
@@ -76,6 +76,8 @@
                     echo'No Items In Cart';
                 }
             }
+            
+            
 
            
 
