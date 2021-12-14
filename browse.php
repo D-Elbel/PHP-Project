@@ -1,30 +1,13 @@
 
     <?php include 'header.php';
-          //include 'cart.php';
-    ?>
 
-        
+   
 
-        <?php
-
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-    $_SESSION["basket"] = array();
-    $_SESSION["basketIDs"] = array();
-    $_SESSION["basketQuants"] = array();
+    if($_SESSION["basket"] == false){
+        $_SESSION["basketIDs"] = array();
+        $_SESSION["basketQuants"] = array();
+    }
     
-}
-
-        
-
-        $basket_ids = $_SESSION["basketIDs"];
-        $basket_quants = $_SESSION["basketQuants"];
-
-       
-
-     //   if(!isset($_POST['productname'])){
-     //       include 'browsetable.php';
-     //   }
 
         echo"<div class=\"resultsDiv\">";
 
@@ -73,9 +56,9 @@ if (session_status() === PHP_SESSION_NONE) {
             }
 
             if(isset($_POST['addProd'])){
-
-            
                 
+                $_SESSION["basket"] = true;
+            
                 array_push($_SESSION["basketIDs"], $_POST['addProd']);
                 array_push($_SESSION["basketQuants"], $_POST['quantity']);
                
@@ -84,6 +67,7 @@ if (session_status() === PHP_SESSION_NONE) {
                 
 
                 echo'<div class="cartSuccess"><h2>Items Successfully Added!</h2></div>';
+
             }
             
            

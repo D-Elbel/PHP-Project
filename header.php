@@ -3,13 +3,12 @@
         <title>Browse Products</title>
         <link rel="stylesheet" href="style.css">
         <?php 
-            if (session_status() === PHP_SESSION_NONE) {
+           
                 session_start();
-                $_SESSION["basket"] = array();
-                $_SESSION["basketIDs"] = array();
-                $_SESSION["basketQuants"] = array();
+
                 
-            }
+                
+           
             echo'<script src="scripts.js"> </script>';
 
         ?>

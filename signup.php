@@ -1,7 +1,6 @@
 
     <?php include 'header.php'
 
-        
     ?>
 
     <div class="loginPage">
@@ -38,13 +37,14 @@
 
     <?php
 
-if (session_status() === PHP_SESSION_NONE) {
+
     session_start();
+    $_SESSION["basket"] = false;
     $_SESSION["basket"] = array();
     $_SESSION["basketIDs"] = array();
     $_SESSION["basketQuants"] = array();
     
-}
+
 
        
 if (isset($_POST['submitdetails'])) {                   
