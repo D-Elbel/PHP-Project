@@ -5,9 +5,13 @@
 <div class="loginPage">
 
     <div class="signupDiv">
+
         <form action="signup.php" method="post">
 
             <table>
+                <tr>
+                    <h2>Sign Up</h2>
+                </tr>
                 <tr>
                     <td>Firstname</td>
                     <td><input type="text" name="cfirstname"></td>
@@ -42,13 +46,18 @@
                 </tr>
             </table>
 
-            <input type="submit" name="submitdetails" value="SUBMIT">
+            <input type="submit" name="submitdetails" value="Sign Up">
         </form>
     </div>
+    <div class="verticalSep"></div>
 
     <div class="loginDiv">
+
         <form action="signup.php" method="post">
             <table>
+                <tr>
+                    <h2>Log In</h2>
+                </tr>
                 <tr>
                     <td>Email</td>
                     <td><input type="text" name="lcemail"></td>
@@ -58,7 +67,7 @@
                     <td><input type="text" name="lcphone"></td>
                 </tr>
             </table>
-            <input type="submit" name="signIn" value="SUBMIT">
+            <input type="submit" name="signIn" value="Log In">
         </form>
     </div>
 
@@ -142,8 +151,8 @@ if (isset($_POST['signIn'])) {
                     $_SESSION['userID'] = $row['CustID'];
                 }
                 // echo"error";
-
-
+                header("Location: ./browse.php");
+                die();
             } else {
                 echo "error";
             }

@@ -60,6 +60,19 @@ svg {
   margin-left: auto;
 }
 
+h2 {
+  text-align: center;
+}
+
+.verticalSep {
+  width: 4px;
+  border: 1px solid whitesmoke;
+  background-color: whitesmoke;
+  border-radius: 5px;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
 table {
   margin-right: 10px;
   margin-left: auto;
