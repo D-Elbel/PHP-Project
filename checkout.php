@@ -3,6 +3,8 @@
 $orderValue = 0;
 $orderID;
 
+echo '<div class="loginPage">';
+
 if (isset($_POST['checkoutSubmit'])) {
     try {
         $pdo = new PDO('mysql:host=localhost;dbname=grocerystore; charset=utf8', 'root', '');
@@ -15,7 +17,7 @@ if (isset($_POST['checkoutSubmit'])) {
 
         $stmt->execute();
 
-        echo "inserted";
+        //echo "inserted";
     } catch (PDOException $e) {
         $title = 'An error has occurred';
         $output = 'Database error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
@@ -30,7 +32,7 @@ if (isset($_POST['checkoutSubmit'])) {
         $stmt->execute();
 
         while ($row = $stmt->fetch()) {
-            echo "got orderid";
+            //echo "got orderid";
 
             $orderID = $row[0];
         }
@@ -50,9 +52,9 @@ if (isset($_POST['checkoutSubmit'])) {
             $stmt->bindValue(':quantity', (int)$_SESSION['basketQuants'][$i]);
             $stmt->bindValue(':orderID', $orderID);
 
-            echo "ITEM ID" . (int)$_SESSION['basketIDs'][$i];
-            echo "<br>QUANTITY" . (int)$_SESSION['basketQuants'][$i];
-            echo "<br>ORDER ID" . (int)$orderID;
+            //echo "ITEM ID" . (int)$_SESSION['basketIDs'][$i];
+            //echo "<br>QUANTITY" . (int)$_SESSION['basketQuants'][$i];
+            //echo "<br>ORDER ID" . (int)$orderID;
 
 
             $stmt->execute();
@@ -89,8 +91,8 @@ if (isset($_POST['checkoutSubmit'])) {
         $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':value', (float)$orderValue);
         $stmt->bindValue(':orderID', (int)$orderID);
-        echo "ORder value is " . $orderValue;
-        echo "ORder ID is " . $orderID . "<br><br>";
+        echo "<div><h2>Thank you for your purchase!</h2>";
+        echo "<p>Click <a href='browse.php'>here</a> to continue shopping</p></div>";
 
 
         $stmt->execute();
@@ -111,14 +113,12 @@ if (isset($_POST['checkoutSubmit'])) {
     unset($_SESSION['orderID']);
 }
 
-echo '<table>';
+echo '<div class="cartPane"><table class="checkoutTable"><tr><th>Category</th><th>Name</th><th>Price</th><th>Quantity</th></tr>';
 
 //print_r($_SESSION['basketIDs']);
 //print_r($_SESSION['basketQuants']);
 
 for ($i = 0; $i <= count($_SESSION['basketIDs']) - 1; $i++) {
-
-    echo $i;
 
     $pdo = new PDO('mysql:host=localhost;dbname=grocerystore; charset=utf8', 'root', '');
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -134,23 +134,21 @@ for ($i = 0; $i <= count($_SESSION['basketIDs']) - 1; $i++) {
 
 
         //echo [(string)$_SESSION['basketIDs'][$i]];
-        echo '<tr><td>' . $row['category'] . '</td>' . '<td>' . $row['productname'] . '<td>€' . $row['price'] . '</td><td>' . $_SESSION['basketQuants'][$i] . '</td></tr>';
+        echo '<tr><th>' . $row['category'] . '</th>' . '<td>' . $row['productname'] . '<td>€' . $row['price'] . '</td><td>' . $_SESSION['basketQuants'][$i] . '</td></tr>';
 
         $orderValue = $orderValue + ($row['price'] * $_SESSION['basketQuants'][$i]);
     }
 }
 
-echo '</table>';
+echo '<tr><td><form action="checkout.php" method="post">
+<input type="submit" name="checkoutSubmit" value="Check Out">
+</form></td><td>Your Order Total: €' . $orderValue . '</td></tr></table>';
+echo '</div>';
 
-echo "<h2>Thank you for your purchase!</h2>";
-
-
-echo $orderValue;
+//echo "<h2>Thank you for your purchase!</h2>";
 
 ?>
 
-<form action="checkout.php" method="post">
-    <input type="submit" name="checkoutSubmit" value="SUBMIT">
-</form>
 
+</div>
 <?php include 'footer.php'; ?>

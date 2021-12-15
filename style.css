@@ -76,18 +76,25 @@ form {
   justify-content: space-around;
 }
 
-#cartPane {
-  position: absolute;
-  right: 50px;
-  top: 100px;
-  width: 20vw;
-  height: 40vh;
-  background-color: green;
-  display: none;
-  z-index: 9000;
+.cartPane {
+  background-color: whitesmoke;
 }
 
-input {
+.checkoutTable,
+.checkouttable th,
+.checkouttable td {
+  border: 1px solid gray;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+.checkoutTable tr {
+  border: 1px solid gray;
+  margin: 0.5rem;
+  text-align: left;
+}
+
+.cartPane input {
   margin: 0.2rem;
 }
 

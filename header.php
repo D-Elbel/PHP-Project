@@ -63,29 +63,6 @@
             </ul>
         </nav>
 
-        <div id="cartPane">
-            <table>
 
-                <?php
-
-                if (isset($_SESSION['basketIDs'])) {
-                    if (count($_SESSION['basketIDs']) > 0) {
-
-                        for ($i = 0; $i < count($_SESSION['basketIDs']); $i++) {
-                            echo '<tr><td>' . $_SESSION['basketIDs'][$i] . '</td></tr>';
-                        }
-                    } else {
-                        echo 'No Items In Cart';
-                    }
-                }
-
-
-
-
-
-
-                ?>
-            </table>
-        </div>
 
     </header>
