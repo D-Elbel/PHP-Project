@@ -1,108 +1,156 @@
+<?php include 'header.php';
 
-    <?php include 'header.php';
+$orderValue = 0;
+$orderID;
 
-   if($_SESSION["basket"] == false){
-    $_SESSION["basketIDs"] = array();
-    $_SESSION["basketQuants"] = array();
-   }
+if (isset($_POST['checkoutSubmit'])) {
+    try {
+        $pdo = new PDO('mysql:host=localhost;dbname=grocerystore; charset=utf8', 'root', '');
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = "INSERT INTO orders (CustID, value, dateOfPurchase) VALUES(:custID, 0, SYSDATE())";
 
-   if (isset($_POST['purchase'])) {                   
-    try { 
-        $cfirstname = $_POST['cfirstname'];
-        $clastname = $_POST['clastname'];
-        $cphone = $_POST['cphone'];
-        $cemail = $_POST['cemail'];
-        $ceircode = $_POST['ceircode'];
-        $ccounty = $_POST['ccounty'];
-        $ctown = $_POST['ctown'];
-        $cstreet = $_POST['cstreet'];
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':custID', $_SESSION['userID']);
+        //$stmt->bindValue(':date', date('m/d/Y'));
 
-        if ($cfirstname == ''  or $clastname == '')
-        {
-            echo("You did not complete the insert form correctly <br> ");
+        $stmt->execute();
+
+        echo "inserted";
+    } catch (PDOException $e) {
+        $title = 'An error has occurred';
+        $output = 'Database error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
+    }
+
+    try {
+        $pdo = new PDO('mysql:host=localhost;dbname=grocerystore; charset=utf8', 'root', '');
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = "SELECT MAX(OrderID) FROM Orders";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+
+        while ($row = $stmt->fetch()) {
+            echo "got orderid";
+
+            $orderID = $row[0];
         }
-        else{
-            $pdo = new PDO('mysql:host=localhost;dbname=grocerystore; charset=utf8', 'root', ''); 
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);   
-            $sql = "INSERT INTO customers (firstname, lastname, phone, email, eircode, county, town, street) VALUES(:cfirstname, :clastname, :cphone, :cemail, :ceircode,:ccounty, :ctown, :cstreet)";
-            
+    } catch (PDOException $e) {
+        $title = 'An error has occurred';
+        $output = 'Database error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
+    }
+
+    for ($i = 0; $i <= count($_SESSION['basketIDs']) - 1; $i++) {
+        try {
+            $pdo = new PDO('mysql:host=localhost;dbname=grocerystore; charset=utf8', 'root', '');
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $sql = "INSERT INTO orderitems (OrderID, ProductID, Quantity) VALUES(:orderID, :prodID, :quantity)";
+
             $stmt = $pdo->prepare($sql);
-            
-            $stmt->bindValue(':cfirstname', $cfirstname);
-            $stmt->bindValue(':clastname', $clastname);
-            $stmt->bindValue(':cphone', $cphone);
-            $stmt->bindValue(':cemail', $cemail);
-            $stmt->bindValue(':ceircode', $ceircode);
-            $stmt->bindValue(':ccounty', $ccounty);
-            $stmt->bindValue(':ctown', $ctown);
-            $stmt->bindValue(':cstreet', $cstreet);
+            $stmt->bindValue(':prodID', (int)$_SESSION['basketIDs'][$i]);
+            $stmt->bindValue(':quantity', (int)$_SESSION['basketQuants'][$i]);
+            $stmt->bindValue(':orderID', $orderID);
+
+            echo "ITEM ID" . (int)$_SESSION['basketIDs'][$i];
+            echo "<br>QUANTITY" . (int)$_SESSION['basketQuants'][$i];
+            echo "<br>ORDER ID" . (int)$orderID;
+
 
             $stmt->execute();
-            echo  "Sign Up Successful!";
-            }
-        } 
-        catch (PDOException $e) { 
+        } catch (PDOException $e) {
             $title = 'An error has occurred';
             $output = 'Database error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
-        } 
-        } 
+        }
+    }
+
+    for ($i = 0; $i <= count($_SESSION['basketIDs']) - 1; $i++) {
+
+        echo $i;
+
+        $pdo = new PDO('mysql:host=localhost;dbname=grocerystore; charset=utf8', 'root', '');
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = "SELECT * FROM Products Where ProductID = :prodID";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':prodID', (int)$_SESSION['basketIDs'][$i]);
+
+        $stmt->execute();
 
 
-        if (isset($_POST['signIn'])) {                   
-            try { 
-                $lcemail = $_POST['lcemail'];                
-                $lcphone = $_POST['lcphone'];
-        
-                if ($lcemail == ''  or $lcphone == '')
-                {
-                    echo("Please enter your login details");
-                }
-                else{
-                    $pdo = new PDO('mysql:host=localhost;dbname=grocerystore; charset=utf8', 'root', ''); 
-                    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);   
-                    $sql = "SELECT * FROM customers where phone = :cphone AND email = :cemail";
-                    
-                    $stmt = $pdo->prepare($sql);
-                    
-                    
-                    $stmt->bindValue(':cphone', $lcphone);
-                    $stmt->bindValue(':cemail', $lcemail);                   
-                    $stmt->execute();
+        while ($row = $stmt->fetch()) {
+            $orderValue = $orderValue + ($row['price'] * $_SESSION['basketQuants'][$i]);
+        }
+    }
 
-                    if($stmt->fetchColumn() > 0){
+    try {
+        $pdo = new PDO('mysql:host=localhost;dbname=grocerystore; charset=utf8', 'root', '');
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = "UPDATE Orders SET value = :value WHERE OrderID = :orderID";
 
-                        $sql = "SELECT * FROM customers where phone = :cphone AND email = :cemail";
-                        $st = $pdo->prepare($sql);
-                        $stmt->bindValue(':cphone', $lcphone);
-                        $stmt->bindValue(':cemail', $lcemail);                   
-                        $stmt->execute();
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':value', (float)$orderValue);
+        $stmt->bindValue(':orderID', (int)$orderID);
+        echo "ORder value is " . $orderValue;
+        echo "ORder ID is " . $orderID . "<br><br>";
 
-                        while ($row = $stmt->fetch()) { 
 
-                            echo"You have successfully logged in";
-                        $_SESSION['loggedIn'] = true;
-                        $_SESSION['userID'] = $row['CustID'];
-                        
-                           
-                         }
-                        // echo"error";
-                        
-                        
-                    }
-                    else{
-                        echo"error";
-                    }
-                    
-                    }
-                } 
-                catch (PDOException $e) { 
-                    $title = 'An error has occurred';
-                    $output = 'Database error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
-                } 
-                }
+        $stmt->execute();
+    } catch (PDOException $e) {
+        $title = 'An error has occurred';
+        $output = 'Database error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
+    }
 
-    
-                               
-    ?>
 
-<?php include 'footer.php'?>
+
+
+
+
+
+
+    $_SESSION['basketQuants'] = array();
+    $_SESSION['basketIDs'] = array();
+    unset($_SESSION['orderID']);
+}
+
+echo '<table>';
+
+//print_r($_SESSION['basketIDs']);
+//print_r($_SESSION['basketQuants']);
+
+for ($i = 0; $i <= count($_SESSION['basketIDs']) - 1; $i++) {
+
+    echo $i;
+
+    $pdo = new PDO('mysql:host=localhost;dbname=grocerystore; charset=utf8', 'root', '');
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $sql = "SELECT * FROM Products Where ProductID = :prodID";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(':prodID', (int)$_SESSION['basketIDs'][$i]);
+
+    $stmt->execute();
+
+
+    while ($row = $stmt->fetch()) {
+
+
+        //echo [(string)$_SESSION['basketIDs'][$i]];
+        echo '<tr><td>' . $row['category'] . '</td>' . '<td>' . $row['productname'] . '<td>€' . $row['price'] . '</td><td>' . $_SESSION['basketQuants'][$i] . '</td></tr>';
+
+        $orderValue = $orderValue + ($row['price'] * $_SESSION['basketQuants'][$i]);
+    }
+}
+
+echo '</table>';
+
+echo "<h2>Thank you for your purchase!</h2>";
+
+
+echo $orderValue;
+
+?>
+
+<form action="checkout.php" method="post">
+    <input type="submit" name="checkoutSubmit" value="SUBMIT">
+</form>
+
+<?php include 'footer.php'; ?>

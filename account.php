@@ -7,6 +7,8 @@
     
 
 <?php
+
+
 //session_start();
 
     $firstname = "";
@@ -106,6 +108,14 @@
         </table>                                                 
                                        
         <input type="submit" name="submitupdate" value="Update Account Details" >
+        </form>
+    </div>
+
+    <div class="deleteDiv">
+        <h2>Delete Account</h2>
+        <p>Warning: Only accounts that have not made purchases may delete their accounts</p>
+        <form action="deleteAccount.php" method="post">
+        <input type="submit" name="deleteAccount" value="Delete Account">
         </form>
     </div>
 

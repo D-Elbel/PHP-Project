@@ -103,6 +103,11 @@ main {
   display: none;
 }
 
+.deleteDiv {
+  border: 1px solid grey;
+  padding: 1rem;
+}
+
 .cartSuccess {
   width: 20vw;
   height: 20vh;
