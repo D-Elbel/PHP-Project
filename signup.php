@@ -89,8 +89,8 @@ if (isset($_POST['submitdetails'])) {
         $ctown = $_POST['ctown'];
         $cstreet = $_POST['cstreet'];
 
-        if ($cfirstname == ''  or $clastname == '') {
-            echo ("You did not complete the insert form correctly <br> ");
+        if ($cfirstname == ''  or $clastname == '' or $cphone == '' or $cemail == '' or $ceircode == '' or $ccounty == '' or $ctown == '') {
+            echo ("You did not complete the insert form correctly");
         } else {
             $pdo = new PDO('mysql:host=localhost;dbname=grocerystore; charset=utf8', 'root', '');
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

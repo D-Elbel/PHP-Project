@@ -51,23 +51,38 @@ if (isset($_POST['checkoutSubmit'])) {
             $title = 'An error has occurred';
             $output = 'Database error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
         }
-    }
+        try {
+            $pdo = new PDO('mysql:host=localhost;dbname=grocerystore; charset=utf8', 'root', '');
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $sql = "UPDATE Products SET quantity = quantity - :quantity  WHERE ProductID = :prodID";
 
-    for ($i = 0; $i <= count($_SESSION['basketIDs']) - 1; $i++) {
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(':prodID', (int)$_SESSION['basketIDs'][$i]);
+            $stmt->bindValue(':quantity', (int)$_SESSION['basketQuants'][$i]);
 
-        echo $i;
+            $stmt->execute();
+        } catch (PDOException $e) {
+            $title = 'An error has occurred';
+            $output = 'Database error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
+        }
 
-        $pdo = new PDO('mysql:host=localhost;dbname=grocerystore; charset=utf8', 'root', '');
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $sql = "SELECT * FROM Products Where ProductID = :prodID";
 
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':prodID', (int)$_SESSION['basketIDs'][$i]);
+        try {
+            $pdo = new PDO('mysql:host=localhost;dbname=grocerystore; charset=utf8', 'root', '');
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $sql = "SELECT * FROM Products Where ProductID = :prodID";
 
-        $stmt->execute();
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(':prodID', (int)$_SESSION['basketIDs'][$i]);
 
-        while ($row = $stmt->fetch()) {
-            $orderValue = $orderValue + ($row['price'] * $_SESSION['basketQuants'][$i]);
+            $stmt->execute();
+
+            while ($row = $stmt->fetch()) {
+                $orderValue = $orderValue + ($row['price'] * $_SESSION['basketQuants'][$i]);
+            }
+        } catch (PDOException $e) {
+            $title = 'An error has occurred';
+            $output = 'Database error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
         }
     }
 
@@ -120,7 +135,6 @@ echo '<tr><td><form action="checkout.php" method="post">
 <input type="submit" name="checkoutSubmit" value="Check Out">
 </form></td><td>Your Order Total: €' . $orderValue . '</td></tr></table>';
 echo '</div>';
-
 ?>
 
 
