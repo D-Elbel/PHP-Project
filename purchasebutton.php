@@ -1,1 +1,0 @@
-<a href="#" class="myButton">Add to Cart</a> <input type="number" id="quantity" name="quantity" min="1" max="10">

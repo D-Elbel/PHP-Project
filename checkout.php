@@ -136,7 +136,7 @@ for ($i = 0; $i <= count($_SESSION['basketIDs']) - 1; $i++) {
         //echo [(string)$_SESSION['basketIDs'][$i]];
         echo '<tr><th>' . $row['category'] . '</th>' . '<td>' . $row['productname'] . '<td>€' . $row['price'] . '</td><td>' . $_SESSION['basketQuants'][$i] . '</td></tr>';
 
-        $orderValue = $orderValue + ($row['price'] * $_SESSION['basketQuants'][$i]);
+        $orderValue = $orderValue + ((float)$row['price'] * (float)$_SESSION['basketQuants'][$i]);
     }
 }
 

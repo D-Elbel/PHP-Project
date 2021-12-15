@@ -1,7 +1,9 @@
 
     <?php include 'header.php';
 
-
+    if (!isset($_SESSION["basket"])) {
+        $_SESSION["basket"] = false;
+    }
 
     if ($_SESSION["basket"] == false) {
         $_SESSION["basketIDs"] = array();
